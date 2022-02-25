@@ -1830,12 +1830,12 @@ public class HiveMetaStore extends ThriftHiveMetastore {
         if (!tbl.isSetCatName()) {
           tbl.setCatName(getDefaultCatalog(conf));
         }
-        firePreEvent(new PreCreateTableEvent(tbl, this));
 
         ms.openTransaction();
 
         db = ms.getDatabase(tbl.getCatName(), tbl.getDbName());
 
+        firePreEvent(new PreCreateTableEvent(tbl, db, this));
         // get_table checks whether database exists, it should be moved here
         if (is_table_exists(ms, tbl.getCatName(), tbl.getDbName(), tbl.getTableName())) {
           throw new AlreadyExistsException("Table " + getCatalogQualifiedTableName(tbl)
