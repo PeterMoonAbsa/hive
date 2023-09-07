@@ -19,6 +19,7 @@
 package org.apache.hadoop.hive.ql.security.authorization.plugin.metastore;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hive.common.FileUtils;
 import org.apache.hadoop.hive.metastore.ColumnType;
@@ -38,8 +39,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
+import static junit.framework.Assert.assertTrue;
 
 /*
 Test whether HiveAuthorizer for MetaStore operation is trigger and HiveMetaStoreAuthzInfo is created by HiveMetaStoreAuthorizer
@@ -327,6 +331,21 @@ public class TestHiveMetaStoreAuthorizer {
       if (StringUtils.isNotEmpty(err)) {
         assert(true);
       }
+    }
+  }
+
+  @Test
+  public void testUnAuthorizedCause() {
+    UserGroupInformation.setLoginUser(UserGroupInformation.createRemoteUser(unAuthorizedUser));
+    try {
+      Database db = new DatabaseBuilder()
+              .setName(dbName)
+              .build(conf);
+      hmsHandler.create_database(db);
+    } catch (Exception e) {
+      String[] rootCauseStackTrace = ExceptionUtils.getRootCauseStackTrace(e);
+      assertTrue(Arrays.stream(rootCauseStackTrace)
+              .anyMatch(stack -> stack.contains(DummyHiveAuthorizer.class.getName())));
     }
   }
 }
