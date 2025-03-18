@@ -107,10 +107,12 @@ public class HivePrivilegeObject implements Comparable<HivePrivilegeObject> {
    */
   public enum HivePrivilegeObjectType {
     GLOBAL, DATABASE, TABLE_OR_VIEW, PARTITION, COLUMN, LOCAL_URI, DFS_URI, COMMAND_PARAMS, FUNCTION,
+    DATACONNECTOR,
     // HIVE_SERVICE refers to a logical service name. For now hiveserver2 hostname will be
     // used to give service actions a name. This is used by kill query command so it can
     // be authorized specifically to a service if necessary.
-    SERVICE_NAME
+    SERVICE_NAME,
+    SCHEDULED_QUERY, STORAGEHANDLER_URI
   };
 
   /**
@@ -175,6 +177,12 @@ public class HivePrivilegeObject implements Comparable<HivePrivilegeObject> {
 
   public HivePrivilegeObject(String dbname, String objectName, List<String> columns) {
     this(HivePrivilegeObjectType.TABLE_OR_VIEW, dbname, objectName, null, columns, null);
+  }
+
+  public HivePrivilegeObject(String dbname, String objectName, List<String> columns,
+      String ownerName, PrincipalType ownerType) {
+    this(HivePrivilegeObjectType.TABLE_OR_VIEW, dbname, objectName, null, columns,
+        HivePrivObjectActionType.OTHER, null, null, ownerName, ownerType);
   }
 
   public HivePrivilegeObject(HivePrivilegeObjectType type, String dbname, String objectName, List<String> partKeys,

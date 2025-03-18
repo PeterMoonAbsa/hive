@@ -65,10 +65,11 @@ public class CreateFunctionEvent extends HiveMetaStoreAuthorizableEvent {
         Function function = event.getFunction();
         List<ResourceUri> uris   = function.getResourceUris();
         ret.add(new HivePrivilegeObject(HivePrivilegeObject.HivePrivilegeObjectType.DATABASE, function.getDbName(), null, null, null,
-                HivePrivilegeObject.HivePrivObjectActionType.OTHER, null, null
+                HivePrivilegeObject.HivePrivObjectActionType.OTHER, null, null,
+                function.getOwnerName(), function.getOwnerType()
                 ));
         ret.add(new HivePrivilegeObject(HivePrivilegeObject.HivePrivilegeObjectType.FUNCTION, function.getDbName(), function.getFunctionName(), null,
-                null, HivePrivilegeObject.HivePrivObjectActionType.OTHER, null, function.getClassName()));
+                null, HivePrivilegeObject.HivePrivObjectActionType.OTHER, null, function.getClassName(), function.getOwnerName(), function.getOwnerType()));
 
         if (uris != null && !uris.isEmpty()) {
             for(ResourceUri uri: uris) {

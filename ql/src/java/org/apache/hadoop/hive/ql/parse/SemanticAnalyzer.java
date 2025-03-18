@@ -11864,7 +11864,8 @@ public class SemanticAnalyzer extends BaseSemanticAnalyzer {
           colTypes.add(col.getType());
         }
 
-        basicInfos.put(new HivePrivilegeObject(table.getDbName(), table.getTableName(), colNames),
+        basicInfos.put(new HivePrivilegeObject(table.getDbName(), table.getTableName(), colNames,
+              table.getOwner(), table.getOwnerType()),
             new MaskAndFilterInfo(colTypes, additionalTabInfo.toString(), alias, astNode, table.isView(), table.isNonNative()));
       }
       if (astNode.getChildCount() > 0 && !ignoredTokens.contains(astNode.getToken().getType())) {

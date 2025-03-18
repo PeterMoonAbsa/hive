@@ -63,7 +63,7 @@ public class DropFunctionEvent extends HiveMetaStoreAuthorizableEvent {
         Function function = event.getFunction();
         List<ResourceUri> uris   = function.getResourceUris();
         ret.add(new HivePrivilegeObject(HivePrivilegeObject.HivePrivilegeObjectType.FUNCTION, function.getDbName(), function.getFunctionName(), null,
-                null, HivePrivilegeObject.HivePrivObjectActionType.OTHER, null, function.getClassName()));
+                null, HivePrivilegeObject.HivePrivObjectActionType.OTHER, null, function.getClassName(), function.getOwnerName(), function.getOwnerType()));
 
         if (uris != null && !uris.isEmpty()) {
             for(ResourceUri uri: uris) {
