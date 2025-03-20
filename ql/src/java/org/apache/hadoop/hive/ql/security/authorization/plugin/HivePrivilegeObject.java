@@ -297,6 +297,7 @@ public class HivePrivilegeObject implements Comparable<HivePrivilegeObject> {
       default:
       }
     }
+
     return "Object [type=" + type + ", name=" + name + actionTypeStr + "]";
   }
 
